@@ -1,0 +1,292 @@
+package cPresentacion;
+
+import Entidad.Matricula;
+import cNegocio.MatriculaNegocio;
+import java.awt.event.ActionEvent;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.util.List;
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+
+public class RegistroMatricula extends javax.swing.JPanel {
+
+    private MatriculaNegocio matriculaNegocio;
+
+    /**
+     * Creates new form RegistroMatricula
+     */
+    public RegistroMatricula() {
+        initComponents();
+        matriculaNegocio = new MatriculaNegocio();
+        cargarDatosTabla();
+
+        txtNombre.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                String nombre = txtNombre.getText();
+
+                if (!nombre.isEmpty() && !nombre.matches("(\\b[A-Z][a-z]*\\b\\s*)+")) {
+                    JOptionPane.showMessageDialog(null, "Cada palabra debe comenzar con mayúscula.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                    txtNombre.requestFocus();
+                }
+            }
+        });
+
+        txtDni.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                String dni = txtDni.getText();
+
+                if (!dni.isEmpty() && !dni.matches("\\d{8}")) {
+                    JOptionPane.showMessageDialog(null, "Ingrese números de 8 dígitos.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                    txtDni.requestFocus();
+                }
+            }
+        });
+
+        txtDniApoderado.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                String dniApoderado = txtDniApoderado.getText();
+
+                if (!dniApoderado.isEmpty() && !dniApoderado.matches("\\d{8}")) {
+                    JOptionPane.showMessageDialog(null, "Se permite números de 8 dígitos.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                    txtDniApoderado.requestFocus();
+                } else if (!dniApoderado.isEmpty() && !txtDni.getText().isEmpty() && dniApoderado.equals(txtDni.getText())) {
+                    JOptionPane.showMessageDialog(null, "El DNI del alumno y del padre no pueden ser iguales.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                    txtDniApoderado.requestFocus();
+                }
+            }
+        });
+
+        txtNombreApoderado.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                String nombreApoderado = txtNombreApoderado.getText();
+                String nombre = txtNombre.getText();
+
+                if (!nombreApoderado.isEmpty() && !nombreApoderado.matches("(\\b[A-Z][a-z]*\\b\\s*)+")) {
+                    JOptionPane.showMessageDialog(null, "Cada palabra debe comenzar con mayúscula.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                    txtNombreApoderado.requestFocus();
+                } else if (!nombreApoderado.isEmpty() && !nombre.isEmpty() && nombreApoderado.equals(nombre)) {
+                    JOptionPane.showMessageDialog(null, "El nombre del alumno y del apoderado no pueden ser iguales.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                    txtNombreApoderado.requestFocus();
+                }
+            }
+        });
+
+        txtEdad.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                String edadStr = txtEdad.getText();
+                try {
+                    int edad = Integer.parseInt(edadStr);
+                    if (edad < 5 || edad > 30) {
+                        JOptionPane.showMessageDialog(null, "La edad debe ser un número entero entre 5 y 30.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                        txtEdad.requestFocus();
+                    }
+                } catch (NumberFormatException ex) {
+                    // Manejar la excepción aquí
+                }
+            }
+        });
+        
+        
+
+    }
+
+    public void cargarDatosTabla() {
+        List<Matricula> matriculas = matriculaNegocio.obtenerMatriculas();
+        DefaultTableModel modelo = (DefaultTableModel) tableDatosRegistrados.getModel();
+        modelo.setRowCount(0); // Limpiar la tabla
+        for (Matricula matricula : matriculas) {
+            modelo.addRow(new Object[]{matricula.getNombre(), matricula.getDni(), matricula.getApoderado(), matricula.getDniApoderado(), matricula.getEdad(), matricula.getGrado()});
+        }
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The content of this method is always regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        background = new javax.swing.JPanel();
+        lblTitleRegistroMatricula = new javax.swing.JLabel();
+        lblNombre = new javax.swing.JLabel();
+        txtNombre = new javax.swing.JTextField();
+        lblNombreApoderado = new javax.swing.JLabel();
+        txtNombreApoderado = new javax.swing.JTextField();
+        lblDni = new javax.swing.JLabel();
+        txtDni = new javax.swing.JTextField();
+        lblDniApoderado = new javax.swing.JLabel();
+        txtDniApoderado = new javax.swing.JTextField();
+        lblEdad = new javax.swing.JLabel();
+        txtEdad = new javax.swing.JTextField();
+        lblGrado = new javax.swing.JLabel();
+        cboxGrado = new javax.swing.JComboBox<>();
+        btnRegistrarAlumno = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tableDatosRegistrados = new javax.swing.JTable();
+
+        setBackground(new java.awt.Color(255, 255, 255));
+
+        background.setBackground(java.awt.Color.white);
+        background.setForeground(new java.awt.Color(0, 0, 255));
+        background.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        lblTitleRegistroMatricula.setFont(new java.awt.Font("Segoe UI Black", 1, 24)); // NOI18N
+        lblTitleRegistroMatricula.setForeground(new java.awt.Color(0, 0, 255));
+        lblTitleRegistroMatricula.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblTitleRegistroMatricula.setText("REGISTRO DE MATRICULAS");
+        background.add(lblTitleRegistroMatricula, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 730, -1));
+
+        lblNombre.setForeground(new java.awt.Color(0, 0, 255));
+        lblNombre.setText("Nombre Completo:");
+        background.add(lblNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, 110, -1));
+
+        txtNombre.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        background.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 100, 250, 30));
+
+        lblNombreApoderado.setBackground(new java.awt.Color(0, 0, 255));
+        lblNombreApoderado.setForeground(new java.awt.Color(0, 0, 255));
+        lblNombreApoderado.setText("Nombre del apoderado:");
+        background.add(lblNombreApoderado, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 80, 170, -1));
+
+        txtNombreApoderado.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        background.add(txtNombreApoderado, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 100, 250, 30));
+
+        lblDni.setForeground(new java.awt.Color(0, 0, 255));
+        lblDni.setText("DNI:");
+        background.add(lblDni, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, 110, -1));
+
+        txtDni.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        background.add(txtDni, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 160, 250, 30));
+
+        lblDniApoderado.setForeground(new java.awt.Color(0, 0, 255));
+        lblDniApoderado.setText("DNI del apoderado:");
+        background.add(lblDniApoderado, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 140, 110, -1));
+
+        txtDniApoderado.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        background.add(txtDniApoderado, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 160, 250, 30));
+
+        lblEdad.setForeground(new java.awt.Color(0, 0, 255));
+        lblEdad.setText("Edad:");
+        background.add(lblEdad, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 200, 110, -1));
+
+        txtEdad.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        background.add(txtEdad, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 220, 250, 30));
+
+        lblGrado.setForeground(new java.awt.Color(0, 0, 255));
+        lblGrado.setText("Grado:");
+        background.add(lblGrado, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 200, -1, -1));
+
+        cboxGrado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "primer grado", "segundo grado", "tercer grado", "cuarto grado", "quinto grado" }));
+        background.add(cboxGrado, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 220, 250, 30));
+
+        btnRegistrarAlumno.setBackground(new java.awt.Color(255, 255, 255));
+        btnRegistrarAlumno.setForeground(new java.awt.Color(0, 0, 255));
+        btnRegistrarAlumno.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/guardar-como.png"))); // NOI18N
+        btnRegistrarAlumno.setText("REGISTRAR");
+        btnRegistrarAlumno.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnRegistrarAlumno.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegistrarAlumnoActionPerformed(evt);
+            }
+        });
+        background.add(btnRegistrarAlumno, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 260, -1, -1));
+
+        tableDatosRegistrados.setBackground(new java.awt.Color(255, 255, 255));
+        tableDatosRegistrados.setForeground(new java.awt.Color(0, 0, 255));
+        tableDatosRegistrados.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
+            },
+            new String [] {
+                "Nombre", "DNI", "Apoderado", "Dni Apoderado", "Edad", "Grado"
+            }
+        ));
+        jScrollPane1.setViewportView(tableDatosRegistrados);
+
+        background.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 300, 660, 190));
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(background, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(background, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+    }// </editor-fold>//GEN-END:initComponents
+
+
+    private void btnRegistrarAlumnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarAlumnoActionPerformed
+        String nombre = txtNombre.getText();
+        String dni = txtDni.getText();
+        String edadText = txtEdad.getText();
+        String nombreApoderado = txtNombreApoderado.getText();
+        String dniApoderado = txtDniApoderado.getText();
+
+        // Verificar si los campos están vacíos
+        if (nombre.isEmpty() || dni.isEmpty() || edadText.isEmpty() || nombreApoderado.isEmpty() || dniApoderado.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Faltan campos por rellenar.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        int edad;
+        try {
+            edad = Integer.parseInt(edadText);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "La edad debe ser un número entero.");
+            return;
+        }
+
+        Matricula matricula = new Matricula(
+                nombre,
+                dni,
+                nombreApoderado,
+                dniApoderado,
+                edad,
+                (String) cboxGrado.getSelectedItem()
+        );
+
+        matriculaNegocio.registrarMatricula(matricula);
+
+        // Actualizar la tabla con la nueva matrícula registrada
+        DefaultTableModel modelo = (DefaultTableModel) tableDatosRegistrados.getModel();
+        modelo.addRow(new Object[]{matricula.getNombre(), matricula.getDni(), matricula.getApoderado(), matricula.getDniApoderado(), matricula.getEdad(), matricula.getGrado()});
+    }//GEN-LAST:event_btnRegistrarAlumnoActionPerformed
+
+    
+    
+    
+
+    
+    
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel background;
+    private javax.swing.JButton btnRegistrarAlumno;
+    private javax.swing.JComboBox<String> cboxGrado;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblDni;
+    private javax.swing.JLabel lblDniApoderado;
+    private javax.swing.JLabel lblEdad;
+    private javax.swing.JLabel lblGrado;
+    private javax.swing.JLabel lblNombre;
+    private javax.swing.JLabel lblNombreApoderado;
+    private javax.swing.JLabel lblTitleRegistroMatricula;
+    private javax.swing.JTable tableDatosRegistrados;
+    private javax.swing.JTextField txtDni;
+    private javax.swing.JTextField txtDniApoderado;
+    private javax.swing.JTextField txtEdad;
+    private javax.swing.JTextField txtNombre;
+    private javax.swing.JTextField txtNombreApoderado;
+    // End of variables declaration//GEN-END:variables
+}
